@@ -7,6 +7,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class AdminMiddleware
 {
@@ -20,7 +21,7 @@ class AdminMiddleware
     public function handle(Request $request, Closure $next)
     {
         if (!Auth::check() || !Auth::user()->hasRole('admin')) {
-            return response()->json(['message' => 'Unauthorized'], 403);
+            return Inertia::render('Errors/403')->toResponse($request)->setStatusCode(403);
         }
 
         return $next($request);
